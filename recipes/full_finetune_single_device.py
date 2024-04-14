@@ -103,22 +103,16 @@ class FullFinetuneRecipeSingleDevice(FTRecipeInterface):
                 "full fp16 training is not supported with this recipe. Please use bf16 or fp32 instead."
             )
 
-        # For CUDA devices, check if the HW supports bf16 if bf16 is specified.
-        if (
-            self._dtype == torch.bfloat16
-            and self._device != torch.device("cpu")
-            and not torch.cuda.is_bf16_supported()
-        ):
-            raise RuntimeError("Full bf16 training is not supported on this hardware.")
-
         # logging attributes
         self._output_dir = cfg.output_dir
         self._log_every_n_steps = cfg.log_every_n_steps if cfg.log_every_n_steps else 1
         self._log_peak_memory_every_n_steps = 100
+
         # Training cfg
         self._resume_from_checkpoint = cfg.resume_from_checkpoint
         self._gradient_accumulation_steps = cfg.gradient_accumulation_steps
         self._optimizer_in_bwd = cfg.optimizer_in_bwd
+
         # TODO: find a better place / way to perform validation of args that don't yet
         # compose with each other.
         if self._gradient_accumulation_steps > 1 and self._optimizer_in_bwd:
@@ -126,6 +120,7 @@ class FullFinetuneRecipeSingleDevice(FTRecipeInterface):
                 "Gradient accumulation is not supported with optimizer in bwd."
                 "Please set gradient_accumulation_steps=1, or optimizer_in_bwd=False."
             )
+
         # These are public properties which are updated by the checkpoint loader
         # when ``resume_from_checkpoint`` is `True` or validated in tests
         self.seed = utils.set_seed(seed=cfg.seed)
