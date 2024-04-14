@@ -6,7 +6,7 @@
 
 # torchtune
 
-[**Introduction**](#introduction) | [**Installation**](#installation) | [**Get Started**](#get-started) |  [**Documentation**](https://pytorch.org/torchtune) | [**Design Principles**](#design-principles) | [**Contributing**](#contributing) | [**License**](#license)
+[**Introduction**](#introduction) | [**Installation**](#installation) | [**Get Started**](#get-started) |  [**Documentation**](https://pytorch.org/torchtune) | [**Design Principles**](#design-principles) | [**Community Contributions**](#community-contributions) | [**License**](#license)
 
 &nbsp;
 
