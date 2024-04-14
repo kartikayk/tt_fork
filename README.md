@@ -64,6 +64,11 @@ Memory-efficiency is important to us. All of our recipes are tested on a variety
 
 Single GPU recipes expose a number of memory optimizations that aren't available in the distributed versions. These include support for low-precision optimizers from [bitsandbytes](https://huggingface.co/docs/bitsandbytes/main/en/index) and fusing optimizer step with backward to reduce memory footprint from the gradients. For memory-constrained setups, we recommend using the single-device configs as a starting point. For example, our default QLoRA config has a peak memory usage of ``~9.3GB``. Similarly LoRA on single device with ``batch_size=2`` has a peak memory usage of ``~15.5GB``. Both of these are with ``dtype=bf16`` and ``AdamW`` as the optimizer.
 
+&nbsp;
+
+### Datasets
+
+torchtune provides [built-in support](torchtune/datasets/) for several popular datasets such as Alpaca, Grammar, Samsum, Slimorca etc. In the coming weeks, We'll be augmenting these datasets with several features such as Sample Packing.
 
 &nbsp;
 
