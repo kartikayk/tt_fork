@@ -31,11 +31,11 @@ torchtune focuses on integrating with popular tools and libraries from the ecosy
 - [Weights and Biases](https://wandb.ai/site) for tracking training progress and logging metrics
 - [ExecuTorch](https://pytorch.org/executorch-overview) for on-device inference
 
-Memory-efficiency is important to us. All of our recipes are tested on a variety of setups including commodity GPUs with 24GB of VRAM as well as beefier options found in data centers. More details can be found in the [fine-tuning recipes](#fine-tuning-recipes) section.
-
 &nbsp;
 
-The library currently supports the following models.
+### Models
+
+torchtune currently supports the following models.
 
 | Model                                         | Sizes     |
 |-----------------------------------------------|-----------|
@@ -43,6 +43,26 @@ The library currently supports the following models.
 | [Mistral](https://huggingface.co/mistralai)   | 7B [[model](torchtune/models/mistral/_model_builders.py), [configs](recipes/configs/mistral/)] |
 | [Gemma](https://huggingface.co/collections/google/gemma-release-65d5efbccdbb8c4202ec078b)   | 2B [[model](torchtune/models/gemma/_model_builders.py), [configs](recipes/configs/gemma/)] |
 
+We'll be adding a number of new models in the coming weeks, including support for 70B versions and MoEs.
+
+&nbsp;
+
+### Fine-tuning recipes
+
+torchtune provides the following fine-tuning recipes.
+
+| Training                           | Fine-tuning Method                 |
+|------------------------------------|------------------------------------|
+| Distributed Training [1 to 8 GPUs] | Full [[code](recipes/full_finetune_distributed.py), [example](recipes/configs/llama2/13B_full.yaml)], LoRA [[code](recipes/lora_finetune_distributed.py), [example](recipes/configs/llama2/13B_lora.yaml)] |
+| Single Device / Low Memory [1 GPU] | Full [[code](recipes/full_finetune_distributed.py), [example](recipes/configs/llama2/13B_full.yaml)], LoRA + QLoRA [[code](recipes/lora_finetune_distributed.py), [example](recipes/configs/llama2/13B_lora.yaml)] |
+| Single Device [1 GPU]              | DPO [[code](recipes/full_finetune_distributed.py), [example](recipes/configs/llama2/13B_full.yaml)]
+
+&nbsp;
+
+
+Memory-efficiency is important to us. All of our recipes are tested on a variety of setups including commodity GPUs with 24GB of VRAM as well as beefier options found in data centers.
+
+Single GPU recipes expose a number of memory optimizations that aren't available in the distributed versions. These include support for low-precision optimizers from [bitsandbytes](https://huggingface.co/docs/bitsandbytes/main/en/index) and fusing optimizer step with backward to reduce memory footprint from the gradients. For memory-constrained setups, we recommend using the single-device configs as a starting point. For example, our default QLoRA config has a peak memory usage of ``~9.3GB``. Similarly LoRA on single device with ``batch_size=2`` has a peak memory usage of ``~15.5GB``. Both of these are with ``dtype=bf16`` and ``AdamW`` as the optimizer.
 
 
 &nbsp;
@@ -107,23 +127,7 @@ You can find your token at https://huggingface.co/settings/tokens
 
 &nbsp;
 
-### Fine-tuning recipes
-
-torchtune provides the following fine-tuning recipes.
-
-| Training                           | Fine-tuning Method                 |
-|------------------------------------|------------------------------------|
-| Distributed Training [1 to 8 GPUs] | Full [[code](recipes/full_finetune_distributed.py), [example](recipes/configs/llama2/13B_full.yaml)], LoRA [[code](recipes/lora_finetune_distributed.py), [example](recipes/configs/llama2/13B_lora.yaml)] |
-| Single Device / Low Memory [1 GPU] | Full [[code](recipes/full_finetune_distributed.py), [example](recipes/configs/llama2/13B_full.yaml)], LoRA + QLoRA [[code](recipes/lora_finetune_distributed.py), [example](recipes/configs/llama2/13B_lora.yaml)] |
-| Single Device [1 GPU]              | DPO [[code](recipes/full_finetune_distributed.py), [example](recipes/configs/llama2/13B_full.yaml)]
-
-&nbsp;
-
-
-Single GPU recipes expose a number of memory optimizations that aren't available in the distributed versions. These include support for low-precision optimizers from [bitsandbytes](https://huggingface.co/docs/bitsandbytes/main/en/index) and fusing optimizer step with backward to reduce memory footprint from the gradients. For memory-constrained setups, we recommend using the single-device configs as a starting point. For example, our default QLoRA config has a peak memory usage of ``~9.3GB``. Similarly LoRA on single device with ``batch_size=2`` has a peak memory usage of ``~15.5GB``. Both of these are with ``dtype=bf16`` and ``AdamW`` as the optimizer.
-
-&nbsp;
-
+### Running fine-tuning recipes
 
 Llama2 7B + LoRA on single GPU + [Alpaca Dataset](https://huggingface.co/datasets/tatsu-lab/alpaca):
 
