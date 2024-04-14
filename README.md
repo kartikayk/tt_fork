@@ -68,7 +68,7 @@ Single GPU recipes expose a number of memory optimizations that aren't available
 
 ### Datasets
 
-torchtune provides [built-in support](torchtune/datasets/) for several popular datasets such as Alpaca, Grammar, Samsum, Slimorca etc. In the coming weeks, We'll be augmenting these datasets with several features such as Sample Packing.
+torchtune provides [built-in support](torchtune/datasets/) for several popular datasets such as Alpaca, Grammar, Samsum, Slimorca etc. In the coming weeks, we'll be augmenting these datasets with several features such as Sample Packing.
 
 &nbsp;
 
@@ -147,8 +147,6 @@ Llama2 7B + LoRA on two GPUs + [Alpaca Dataset](https://huggingface.co/datasets/
 tune run --nproc_per_node 2 full_finetune_distributed --config llama2/7B_full_distributed
 ```
 
-&nbsp;
-
 > Tip: Make sure to place any torchrun commands **before** the recipe specification. Any CLI args after this will override the config and not impact distributed training.
 
 &nbsp;
@@ -185,7 +183,7 @@ tune run full_finetune_distributed --config ./my_custom_config.yaml
 
 &nbsp;
 
-Check out `tune --help` for all possible CLI commands and options.
+Check out `tune --help` for all possible CLI commands and options. For more information on using and updating configs, take a look at our [config deep-dive](https://pytorch.org/torchtune/main/examples/configs.html).
 
 &nbsp;
 
