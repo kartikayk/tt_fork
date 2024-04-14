@@ -168,6 +168,7 @@ max_steps_per_epoch=128
 ```
 
 **Update a Local Copy**
+
 You can also copy the config to your local directory and modify the contents directly:
 
 ```bash
