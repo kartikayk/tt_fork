@@ -19,7 +19,7 @@ torchtune provides:
 - Native-PyTorch implementations of popular LLMs using composable and modular building blocks
 - Easy-to-use and hackable training recipes for popular fine-tuning techniques (LoRA, QLoRA) - no trainers, no frameworks, just PyTorch!
 - YAML configs for easily configuring training, evaluation, quantization or inference recipes
-- Built-in support for many popular dataset formats and prompt templates to help you quickly get-started with training
+- Built-in support for many popular dataset formats and prompt templates to help you quickly get started with training
 
 torchtune focuses on integrating with popular tools and libraries from the ecosystem. These are just a few examples, with more under development:
 
@@ -30,6 +30,7 @@ torchtune focuses on integrating with popular tools and libraries from the ecosy
 - [torchao](https://github.com/pytorch-labs/ao) for lower precision dtypes and post-training quantization techniques
 - [Weights and Biases](https://wandb.ai/site) for tracking training progress and logging metrics
 - [ExecuTorch](https://pytorch.org/executorch-overview) for on-device inference
+- [bitsandbytes](https://huggingface.co/docs/bitsandbytes/main/en/index) for low memory optimizers for our single-device recipes
 
 &nbsp;
 
