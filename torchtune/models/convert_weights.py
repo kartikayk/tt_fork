@@ -30,7 +30,7 @@ _FROM_META = {
 # state dict key mappings from HF's format to TorchTune's format
 _FROM_HF = {
     "model.embed_tokens.weight": "tok_embeddings.weight",
-    "model.layers.{}.self_attn.qkv_proj.weight": "layers.{}.attn.qkv_proj.weight",
+    "model.layers.{}.self_attn.q_proj.weight": "layers.{}.attn.q_proj.weight",
     "model.layers.{}.self_attn.k_proj.weight": "layers.{}.attn.k_proj.weight",
     "model.layers.{}.self_attn.v_proj.weight": "layers.{}.attn.v_proj.weight",
     "model.layers.{}.self_attn.o_proj.weight": "layers.{}.attn.output_proj.weight",
