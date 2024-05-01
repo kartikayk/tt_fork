@@ -317,38 +317,19 @@ def lora_llama2_self_attention(
 
     head_dim = embed_dim // num_heads
     num_kv_heads = num_kv_heads if num_kv_heads else num_heads
-    q_proj = (
+
+    dim1 = num_heads * head_dim
+    dim2 = num_kv_heads * head_dim
+    qkv_proj = (
         LoRALinear(
             embed_dim,
-            num_heads * head_dim,
+            dim1 + 2 * dim2,
             rank=lora_rank,
             alpha=lora_alpha,
             quantize_base=quantize_base,
         )
-        if "q_proj" in lora_modules
-        else nn.Linear(embed_dim, num_heads * head_dim, bias=False)
-    )
-    k_proj = (
-        LoRALinear(
-            embed_dim,
-            num_kv_heads * head_dim,
-            rank=lora_rank,
-            alpha=lora_alpha,
-            quantize_base=quantize_base,
-        )
-        if "k_proj" in lora_modules
-        else nn.Linear(embed_dim, num_kv_heads * head_dim, bias=False)
-    )
-    v_proj = (
-        LoRALinear(
-            embed_dim,
-            num_kv_heads * head_dim,
-            rank=lora_rank,
-            alpha=lora_alpha,
-            quantize_base=quantize_base,
-        )
-        if "v_proj" in lora_modules
-        else nn.Linear(embed_dim, num_kv_heads * head_dim, bias=False)
+        if "qkv_proj" in lora_modules
+        else nn.Linear(embed_dim, dim1 + 2 * dim2, bias=False)
     )
     output_proj = (
         LoRALinear(
@@ -367,9 +348,7 @@ def lora_llama2_self_attention(
         num_heads=num_heads,
         num_kv_heads=num_kv_heads,
         head_dim=head_dim,
-        q_proj=q_proj,
-        k_proj=k_proj,
-        v_proj=v_proj,
+        qkv_proj=qkv_proj,
         output_proj=output_proj,
         pos_embeddings=rope,
         kv_cache=None,
