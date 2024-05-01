@@ -8,6 +8,8 @@ from typing import Optional
 
 from torch import nn, Tensor
 
+import torch
+
 from torchtune.modules.kv_cache import KVCache
 
 
@@ -77,9 +79,7 @@ class CausalSelfAttention(nn.Module):
         num_heads: int,
         num_kv_heads: int,
         head_dim: int,
-        q_proj: nn.Module,
-        k_proj: nn.Module,
-        v_proj: nn.Module,
+        qkv_proj: nn.Module,
         output_proj: nn.Module,
         pos_embeddings: nn.Module,
         kv_cache: Optional[KVCache] = None,
@@ -112,11 +112,12 @@ class CausalSelfAttention(nn.Module):
 
         # Set layers
         self.kv_cache = kv_cache
-        self.q_proj = q_proj
-        self.k_proj = k_proj
-        self.v_proj = v_proj
+        self.qkv_proj = qkv_proj
         self.output_proj = output_proj
         self.pos_embeddings = pos_embeddings
+
+        self.dim1 = self.num_heads * self.head_dim
+        self.dim2 = self.num_kv_heads * self.head_dim
 
     def forward(
         self,
@@ -160,12 +161,8 @@ class CausalSelfAttention(nn.Module):
                 f"than max_seq_len ({self.max_seq_len})"
             )
 
-        # q has shape [b, s, num_heads * head_dim]
-        # k has shape [b, s, num_kv_heads * head_dim]
-        # v has shape [b, s, num_kv_heads * head_dim]
-        q = self.q_proj(x)
-        k = self.k_proj(x)
-        v = self.v_proj(x)
+        qkv = self.qkv_proj(x)
+        q, k, v = torch.split(qkv, [self.dim1, self.dim2, self.dim2], dim=-1)
 
         # number of queries per key/value
         q_per_kv = self.num_heads // self.num_kv_heads
